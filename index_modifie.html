@@ -862,13 +862,22 @@
 
 <script>
 (function(){
-  // ---------- Paramètres via query string ----------
+  // ---------- Paramètres via query string + API NocoDB ----------
   const params = new URLSearchParams(window.location.search);
+  const participantId = params.get('id');
+
   const participant = {
-    id: params.get('id') || '-',
-    nom: params.get('nom') || 'Client',
-    solde: parseInt(params.get('solde'), 10) || 0
+    id: participantId || '-',
+    nom: 'Client',
+    solde: 0,
+    vues: 0
   };
+
+  const API_URL = participantId
+    ? `https://app.nocodb.com/api/v3/data/pqrd6t2vdvhylip/ma68x7libu3ljvb/records/${encodeURIComponent(participantId)}`
+    : null;
+
+  const API_TOKEN = 'nc_pat_YT3HxYY1dCRGp9OKD2UGywZgcZ1tKeBYkP6y13zE';
 
   const fmtMontant = (n) => n.toLocaleString('fr-FR');
 
@@ -880,7 +889,7 @@
   }
 
   function populateParticipant(){
-    document.getElementById('heroId').textContent = participant.id;
+    document.getElementById('heroId').textContent = participant.vues;
     document.getElementById('heroName').textContent = participant.nom;
     document.getElementById('heroSolde').innerHTML = fmtMontant(participant.solde) + '<span>FCFA</span>';
     document.getElementById('avatarInitials').textContent = initials(participant.nom);
@@ -889,8 +898,39 @@
     document.getElementById('summaryAmount').textContent = fmtMontant(participant.solde) + ' FCFA';
   }
 
+  async function loadParticipant(){
+    if(!participantId){
+      document.getElementById('heroName').textContent = 'ID manquant';
+      document.getElementById('headerName').textContent = 'ID manquant';
+      return;
+    }
+
+    try {
+      const response = await fetch(API_URL, {
+        method: 'GET',
+        headers: { 'xc-token': API_TOKEN }
+      });
+
+      if(!response.ok) throw new Error(`Erreur API HTTP ${response.status}`);
+
+      const data = await response.json();
+      const fields = data.fields || {};
+
+      participant.id = data.id ?? participantId;
+      participant.nom = fields.nom || 'Client';
+      participant.vues = Number(fields.vue) || 0;
+      participant.solde = Number(fields.montant) || 0;
+
+      populateParticipant();
+    } catch(error) {
+      console.error('Impossible de récupérer les données du participant :', error);
+      document.getElementById('heroName').textContent = 'Données indisponibles';
+      document.getElementById('headerName').textContent = 'Données indisponibles';
+    }
+  }
+
   // ---------- Ecran PIN ----------
-  const CORRECT_PIN = "97264010";
+  const CORRECT_PIN = "147258";
   const pinForm = document.getElementById('pinForm');
   const pinInput = document.getElementById('pinInput');
   const pinError = document.getElementById('pinError');
@@ -1072,6 +1112,7 @@
 
   // ---------- Initialisation ----------
   populateParticipant();
+  loadParticipant();
 })();
 </script>
 </body>
